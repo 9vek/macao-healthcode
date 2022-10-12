@@ -1,11 +1,22 @@
 <script setup lang='ts'>
 import { useInfoStore } from '../stores/useInfoStore';
+import useQRCode from '../hooks/useQRCode'
+import { onMounted, Ref, ref } from 'vue';
 
 const infoStore = useInfoStore()
+
+const qrCode: Ref<HTMLElement | null> = ref(null)
+
+onMounted(() => {
+  useQRCode(qrCode, "SAMPLE DATA", 16, 4)
+})
+
+
 </script>
 
 <template>
   <div>
+    <div ref="qrCode" class="w-48 h-48 mx-auto mt-16"></div>
     <div class="mt-4 p-4">
       <div>{{ infoStore.name }}</div>
       <div>{{ infoStore.gender }}</div>
