@@ -35,6 +35,7 @@ type InfoStore = {
   getIdentifierTypes: () => string[]
   getPhoneDistricts: () => string[]
   getSymptons: () => string[]
+  fetchResult: () => string
 }
 
 export const useInfoStore = defineStore('info', (): InfoStore => ({
@@ -87,5 +88,8 @@ export const useInfoStore = defineStore('info', (): InfoStore => ({
   },
   getSymptons() {
     return ['发烧', '乏力', '干咳，咽痛', '嗅/味觉减退等症状', '没有以上症状']
+  },
+  fetchResult() {
+    return `${this.name}-${this.identifier.number}-green`
   }
 }))

@@ -8,8 +8,8 @@ const infoStore = useInfoStore()
 const qrCode: Ref<HTMLElement | null> = ref(null)
 
 onMounted(() => {
-  useQRCode(qrCode, "SAMPLE DATA", 16, 4)
-})
+  useQRCode(qrCode, infoStore.fetchResult(), 16, 4)
+})  
 
 
 </script>
