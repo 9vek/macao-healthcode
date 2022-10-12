@@ -1,7 +1,6 @@
 import qrcode from 'qrcode-generator'
-import { Ref } from 'vue';
 
-const useQRCode = (theRef: Ref<null | HTMLElement>, data: string, cellsize: number, margin: number): void => {
+const useQRCode = (data: string): string => {
 
   const typeNumber = 4;
   const errorCorrectionLevel = 'L';
@@ -9,9 +8,7 @@ const useQRCode = (theRef: Ref<null | HTMLElement>, data: string, cellsize: numb
   qr.addData(data);
   qr.make();
 
-  if (theRef.value) {
-    theRef.value.innerHTML = qr.createImgTag(cellsize, margin);
-  }
+  return qr.createSvgTag(6, 4)
 
 }
 

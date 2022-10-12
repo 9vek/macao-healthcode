@@ -90,6 +90,14 @@ export const useInfoStore = defineStore('info', (): InfoStore => ({
     return ['发烧', '乏力', '干咳，咽痛', '嗅/味觉减退等症状', '没有以上症状']
   },
   fetchResult() {
-    return `${this.name}-${this.identifier.number}-green`
+    let color = 'green'
+    
+    if (this.symptom[0] != '没有以上症状')
+    color = 'gold'
+
+    if (this.dangerousTouch)
+    color = 'red'
+
+    return `${this.name}-${this.identifier.number}-${color}`
   }
 }))

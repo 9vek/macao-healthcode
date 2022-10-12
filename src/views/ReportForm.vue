@@ -76,7 +76,6 @@ const submit = () => {
 </script>
 
 <template>
-  <div class="bg-green-500 text-lg text-white font-bold p-2">健康声明</div>
   <div class="p-2">
     <SectionTitle :text="'个人资讯'" />
     <div class="bg-white my-1 px-2 py-0.5">
@@ -140,8 +139,8 @@ const submit = () => {
     </div>
 
     <div class="grid grid-cols-2">
-      <div class="p-4 bg-white border text-center m-2">重置</div>
-      <div class="p-4 bg-blue-500 text-white text-center m-2" @click="submit()">下一步</div>
+      <div class="p-4 bg-white border text-center m-2 cursor-pointer">重置</div>
+      <div class="p-4 bg-blue-500 text-white text-center m-2 cursor-pointer" @click="submit()">下一步</div>
     </div>
 
   </div>
