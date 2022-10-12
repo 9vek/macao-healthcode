@@ -110,7 +110,7 @@ const submit = () => {
 
       <MustFillLabel :text="'联络电话：'" />
       <div class="grid grid-cols-4 space-x-2 mb-2 mr-2">
-        <DropDownMenu :name="'district'" :indicator="'-请选择-'" :options="infoStore.getPhoneDistricts()"
+        <DropDownMenu :name="'district'" :indicator="'-区号-'" :options="infoStore.getPhoneDistricts()"
           :setter="(value) => { infoStore.phone.district = value }"
           :getter="() => { return infoStore.phone.district }"
           :checker="checkers.checkPhoneDistrict" />
@@ -126,7 +126,7 @@ const submit = () => {
     <div class="bg-white my-1 p-4">
       <CheckBox :name="'symptom'" :cols="1" :options="infoStore.getSymptons()" :restrictor="useSymptomCheckbox"
         :setter="(options) => { infoStore.symptom = options[0] == '没有以上症状' ? ['没有以上症状'] : options }"
-        :getter="() => { return []}"
+        :getter="() => { return infoStore.symptom}"
         :checker="checkers.checkSymptons" />
     </div>
 
@@ -135,7 +135,7 @@ const submit = () => {
     <div class="bg-white my-1 p-4">
       <CheckBox :name="'touch'" :cols="2" :options="['是', '否']" :restrictor="useSingleCheckbox"
         :setter="(options) => { infoStore.dangerousTouch = options[0] == '是' }"
-        :getter="() => { return [infoStore.dangerousTouch ? '是' : '否'] }"
+        :getter="() => { return infoStore.dangerousTouch ? ['是'] : infoStore.dangerousTouch == null ? [] : ['否'] }"
         :checker="checkers.checkDangerousTouch" />
     </div>
 

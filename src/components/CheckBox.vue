@@ -22,11 +22,20 @@ emitter.on('submit', () => {
   }
 })
 
-const optionValues: boolean[] = reactive([])
+const optionValuesPre: boolean[] = []
+const storedValues = props.getter()
 
-props.options.forEach(() => {
-  optionValues.push(false)
+console.log(storedValues)
+console.log(props.options)
+
+props.options.forEach((option) => {
+  optionValuesPre.push(storedValues.find((value) => {
+    return value == option
+  }) != undefined)
 })
+console.log(props.name, optionValuesPre)
+
+const optionValues = reactive(optionValuesPre)
 
 const colsClass = computed(() => {
   if (props.cols == 3) {
