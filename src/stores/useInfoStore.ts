@@ -1,91 +1,103 @@
 import { defineStore } from "pinia";
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { db, auth } from '../firebase';
-import { ref as fRef, set as fSet, onValue } from "firebase/database";
 
-type User = {
-  displayName: string
-  email: string
-  logined: boolean
+type Gender = '男' | '女' | ''
+
+type Birthday = {
+  year: string,
+  month: string,
+  day: string
 }
 
-type Message = {
-  from: string
-  text: string
-  time: string
+type Identifier = {
+  type: string
+  number: string
 }
+
+type Phone = {
+  district: string
+  number: string
+}
+
+type Symptom = string[]
 
 type InfoStore = {
-  user: User
-  messageList: Message[]
-  getMessageList: () => void
-  addUserInfo: (email: string, name: string) => void
-  getUserInfo: (email: string) => void
-  sendMessage: (message: string) => void
-  signUp: (name: string, email: string, pwd: string) => void
-  login: (email: string, pwd: string) => void
+  name: string
+  gender: Gender
+  birthday: Birthday
+  identifier: Identifier
+  phone: Phone
+  symptom: string[]
+  dangerousTouch: boolean | null
+  getGenders: () => string[]
+  getYears: (n: number) => string[]
+  getMonths: () => string[]
+  getDays: (m: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12) => string[]
+  getIdentifierTypes: () => string[]
+  getPhoneDistricts: () => string[]
+  getSymptons: () => string[]
+  fetchResult: () => string
 }
 
 export const useInfoStore = defineStore('info', (): InfoStore => ({
-  user: {
-    displayName: '',
-    email: '',
-    logined: false
+  name: '',
+  gender: '',
+  birthday: {
+    year: '',
+    month: '',
+    day: ''
   },
-  messageList: [],
-  getMessageList() {
-    const messages = fRef(db, 'messages/')
-    onValue(messages, (snapshot) => {
-      const data = snapshot.val()
-      this.messageList.length = 0
-      for (const key in data) {
-        this.messageList.push(data[key])
-      }
-    })
+  identifier: {
+    type: '',
+    number: ''
   },
-  async addUserInfo(email, name) {
-    await fSet(fRef(db, `users/${email.replace('.', '')}`), {
-      name: name
-    })
+  phone: {
+    district: '',
+    number: ''
   },
-  getUserInfo(email) {
-    const user = fRef(db, `users/${email.replace('.', '')}`)
-    onValue(user, (snapshot) => {
-      const data = snapshot.val()
-      this.user.displayName = data['name']
-    })
-  },
-  async sendMessage(message) {
-    const time = new Date().toUTCString()
-    await fSet(fRef(db, `messages/${time}-${this.user.displayName}`), {
-      from: this.user.displayName,
-      text: message,
-      time: time
-    })
-    this.getMessageList()
-  },
-  async signUp(name, email, pwd) {
-    try {
-      const result = await createUserWithEmailAndPassword(auth, email, pwd)
-      await updateProfile(result.user, {
-        displayName: name
-      })
-      this.login(email, pwd)
-    } catch(err) {
-      alert(err)
+  symptom: [],
+  dangerousTouch: null,
+  getYears(n): string[] {
+    const years = []
+    for (let y = 2022; y > 2022 - n; y--) {
+      years.unshift(y.toString())
     }
-    
+    return years
   },
-  async login(email, pwd) {
-    try {
-      const result = await signInWithEmailAndPassword(auth, email, pwd)
-      this.user.email = result.user.email as string
-      this.user.displayName = result.user.displayName as string
-      this.user.logined = true
-    } catch(err) {
-      alert(err)
+  getMonths(): string[] {
+    const months = []
+    for (let m = 1; m <= 12; m++) {
+      months.push(m.toString())
     }
+    return months
+  },
+  getDays(m: number): string[] {
+    const days = []
+    for (let d = 1; d <= 31; d++) {
+      days.push(d.toString())
+    }
+    return days
+  },
+  getGenders() {
+    return ['男', '女']
+  },
+  getIdentifierTypes() {
+    return ['澳门居民身份证', '香港居民身份证', '往来港澳通行证','外国护照']
+  },
+  getPhoneDistricts() {
+    return ['853', '852', '86']
+  },
+  getSymptons() {
+    return ['发烧', '乏力', '干咳，咽痛', '嗅/味觉减退等症状', '没有以上症状']
+  },
+  fetchResult() {
+    let color = 'green'
     
-  }
+    if (this.symptom[0] != '没有以上症状')
+    color = 'gold'
 
+    if (this.dangerousTouch)
+    color = 'red'
+
+    return `${this.name}-${this.identifier.number}-${color}`
+  }
 }))

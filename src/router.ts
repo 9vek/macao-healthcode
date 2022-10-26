@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
-import ChatRoom from './views/ChatRoom.vue'
-import Login from './views/Login.vue'
-import SignUp from './views/SignUp.vue'
+import ReportForm from './views/ReportForm.vue'
+import ResultPage from './views/ResultPage.vue'
 
 const webHistory = createWebHistory()
 
@@ -10,15 +9,11 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      component: ChatRoom,
+      component: ReportForm,
     }, 
     {
-      path: '/login',
-      component: Login,
-    }, 
-    {
-      path: '/signup',
-      component: SignUp,
+      path: '/result',
+      component: ResultPage,
     }, 
   ] 
 })
